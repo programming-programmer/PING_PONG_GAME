@@ -16,6 +16,7 @@ public class GameFrame extends JFrame{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pack(); // allows window to fit optimal size for the machine used
 		this.setVisible(true);
-		this.setLocationRelativeTo(null);
+		// this.setLocationRelativeTo(null);
+		
 	}
 }
