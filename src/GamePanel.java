@@ -38,7 +38,8 @@ public class GamePanel extends JPanel implements Runnable{
 	}
 	
 	public void newPaddles() {
-		
+		paddle1 = new Paddles(0, (GAME_HEIGHT/2)-(PADDLE_HEIGHT/2), PADDLE_WIDTH, PADDLE_HEIGHT, 1);
+		paddle2 = new Paddles(GAME_WIDTH-PADDLE_WIDTH, (GAME_HEIGHT/2)-(PADDLE_HEIGHT/2), PADDLE_WIDTH, PADDLE_HEIGHT, 2);
 	}
 	
 	public void paint(Graphics g) {
@@ -46,7 +47,7 @@ public class GamePanel extends JPanel implements Runnable{
 	}
 	
 	public void draw(Graphics g) {
-		
+		paddle1.draw(g);
 	}
 	
 	public void move(){
