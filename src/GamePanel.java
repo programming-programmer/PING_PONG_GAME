@@ -47,12 +47,14 @@ public class GamePanel extends JPanel implements Runnable{
 		image = createImage(getWidth(), getHeight());
 		graphics = image.getGraphics();
 		draw(graphics);
-		g.drawImage(graphics, 0, 0, this);
+		g.drawImage(image, 0, 0, this);
 	}
 	
 	public void draw(Graphics g) {
 		paddle1.draw(g);
 		paddle2.draw(g);
+		ball.draw(g);
+		score.draw(g);
 	}
 	
 	public void move(){
@@ -62,7 +64,49 @@ public class GamePanel extends JPanel implements Runnable{
 	}
 	
 	public void checkCollision(){
+		//prevents collision of paddle1 with window border
+		if (paddle1.y <= 0)
+			paddle1.y = 0;
+		else if (paddle1.y >= (GAME_HEIGHT - PADDLE_HEIGHT))
+			paddle1.y = GAME_HEIGHT - PADDLE_HEIGHT;
 		
+		//prevents collision of paddle2 with window border
+		if (paddle2.y <= 0)
+			paddle2.y = 0;
+		else if (paddle2.y >= (GAME_HEIGHT - PADDLE_HEIGHT))
+			paddle2.y = GAME_HEIGHT - PADDLE_HEIGHT;
+		
+		//prevents collision of ball with window border
+		if (ball.y <= 0)
+			ball.y = -ball.yVelocity;
+		else if (ball.y >= (GAME_HEIGHT - PADDLE_HEIGHT))
+			ball.y = -ball.yVelocity;
+		
+		//bounces ball off both paddles
+		if (ball.intersects(paddle1))
+			ball.yVelocity = -ball.yVelocity;
+			ball.yVelocity = -ball.xVelocity;
+			ball.setXDirection(ball.xVelocity);
+			ball.setYDirection(ball.yVelocity);
+		if(ball.intersects(paddle2))
+			ball.yVelocity = -ball.yVelocity;
+			ball.xVelocity = -ball.xVelocity;
+		ball.setXDirection(-ball.xVelocity);
+		ball.setYDirection(ball.yVelocity);
+		
+		// give player 1 point when it scores,
+		if (ball.x <= 0) {
+			score.player2 ++;
+			newPaddles();
+			newBall();
+			System.out.println("Player 2: " + score.player2);	
+		}	
+		if (ball.x >= GAME_WIDTH - BALL_DIAMETER) {
+			score.player1 ++;
+			newPaddles();
+			newBall();
+			System.out.println("Player 1: " + score.player1);
+		}
 	}
 	
 	public void run(){
@@ -79,8 +123,9 @@ public class GamePanel extends JPanel implements Runnable{
 				checkCollision();
 				repaint();
 				delta--;
+			}
+		}
 	}
-	
 	public class AL extends KeyAdapter{
 		public void KeyPressed(KeyEvent e) {
 			
