@@ -34,7 +34,8 @@ public class GamePanel extends JPanel implements Runnable{
 	}
 	
 	public void newBall(){
-		
+		//random = new Random();
+		ball = new Ball((GAME_WIDTH / 2) - (BALL_DIAMETER / 2), (GAME_HEIGHT / 2) - (BALL_DIAMETER / 2), BALL_DIAMETER, BALL_DIAMETER);
 	}
 	
 	public void newPaddles() {
@@ -43,15 +44,21 @@ public class GamePanel extends JPanel implements Runnable{
 	}
 	
 	public void paint(Graphics g) {
-		
+		image = createImage(getWidth(), getHeight());
+		graphics = image.getGraphics();
+		draw(graphics);
+		g.drawImage(graphics, 0, 0, this);
 	}
 	
 	public void draw(Graphics g) {
 		paddle1.draw(g);
+		paddle2.draw(g);
 	}
 	
 	public void move(){
-		
+		paddle1.move();
+		paddle2.move();
+		ball.move();
 	}
 	
 	public void checkCollision(){
@@ -59,7 +66,19 @@ public class GamePanel extends JPanel implements Runnable{
 	}
 	
 	public void run(){
-		
+		long lastTime = System.nanoTime();
+		double amountOfTicks =60.0;
+		double ns = 1000000000 / amountOfTicks;
+		double delta = 0;
+		while(true) {
+			long now = System.nanoTime();
+			delta += (now -lastTime)/ns;
+			lastTime = now;
+			if(delta >=1) {
+				move();
+				checkCollision();
+				repaint();
+				delta--;
 	}
 	
 	public class AL extends KeyAdapter{
